@@ -18,7 +18,7 @@ RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/php.ini \
  && echo "date.timezone=\"Europe/Berlin\"" >> /usr/local/etc/php/php.ini
 
 # install xdebug
-RUN pecl install xdebug-3.1.0&& docker-php-ext-enable xdebug \
+RUN pecl install xdebug-2.9.0 && docker-php-ext-enable xdebug \
  && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
  && echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
  && echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
