@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:7.2-cli
 
 RUN apt-get update && apt-get install -y git unzip curl
 
@@ -18,7 +18,7 @@ RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/php.ini \
  && echo "date.timezone=\"Europe/Berlin\"" >> /usr/local/etc/php/php.ini
 
 # install xdebug
-RUN pecl install xdebug && docker-php-ext-enable xdebug \
+RUN pecl install xdebug-3.1.0&& docker-php-ext-enable xdebug \
  && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
  && echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
  && echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
