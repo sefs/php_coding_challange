@@ -23,4 +23,16 @@ class FeatureContext extends RawMinkContext
 
         Assert::assertEquals($sum, $json['sum']);
     }
+
+    /**
+     * @Then vacancy response should contain :name equals :value
+     */
+    public function vacancyResponseShouldContainEquals($name, $value)
+    {
+        $response = $this->getSession()->getPage()->getContent();
+
+        $json = json_decode($response, true);
+
+        Assert::assertEquals($value, $json[$name]);
+    }
 }
