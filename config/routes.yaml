@@ -1,3 +1,11 @@
 sum:
     path: /sum/{a}/{b}
     controller: App\Controller\SumController::sumAction
+
+vacancy_search:
+    path: /vacancy/search
+    controller: App\Controller\VacancyController::searchAction
+
+vacancy:
+    path: /vacancy/{id}
+    controller: App\Controller\VacancyController::getAction

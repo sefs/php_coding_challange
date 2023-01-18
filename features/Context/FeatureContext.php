@@ -2,13 +2,13 @@
 
 namespace App\Behat;
 
-use Behat\MinkExtension\Context\RawMinkContext;
+use App\Helper\Str;
 use PHPUnit\Framework\Assert;
 
 /**
  * Defines application features from the specific context.
  */
-class FeatureContext extends RawMinkContext
+class FeatureContext extends AbstractFeatureContext
 {
     /**
      * @param string $sum
@@ -17,9 +17,7 @@ class FeatureContext extends RawMinkContext
      */
     public function thenSumShouldBeEquals($sum)
     {
-        $response = $this->getSession()->getPage()->getContent();
-
-        $json = json_decode($response, true);
+        $json = $this->getJsonResponse();
 
         Assert::assertEquals($sum, $json['sum']);
     }
@@ -29,10 +27,58 @@ class FeatureContext extends RawMinkContext
      */
     public function vacancyResponseShouldContainEquals($name, $value)
     {
-        $response = $this->getSession()->getPage()->getContent();
-
-        $json = json_decode($response, true);
+        $json = $this->getJsonResponse();
 
         Assert::assertEquals($value, $json[$name]);
+    }
+
+    /**
+     * @Then the response should contain list of vacancies
+     */
+    public function theResponseShouldContainListOfVacancies()
+    {
+        $json = $this->getJsonResponse();
+        Assert::assertTrue(count($json) > 0);
+
+        $vacancy = array_shift($json);
+        Assert::assertArrayHasKey('id', $vacancy);
+        Assert::assertArrayHasKey('jobTitle', $vacancy);
+        Assert::assertArrayHasKey('seniorityLevel', $vacancy);
+        Assert::assertArrayHasKey('city', $vacancy);
+        Assert::assertArrayHasKey('salary', $vacancy);
+    }
+
+    /**
+     * @Then the results are sorted by :param
+     */
+    public function theResultsAreSortedBySalary($param)
+    {
+        $list = $this->getJsonResponse();
+        Assert::assertTrue(count($list) > 0);
+
+        $previous = null;
+        foreach ($list as $vacancy) {
+            if (!$previous) {
+                $previous = $vacancy;
+                continue;
+            }
+            Assert::assertTrue($previous[$param] <= $vacancy[$param]);
+        }
+    }
+
+    /**
+     * @Then the results are filtered by location :location
+     */
+    public function theResultsAreFilteredByLocation($location)
+    {
+        $list = $this->getJsonResponse();
+        Assert::assertTrue(count($list) > 0);
+
+        $previous = null;
+        foreach ($list as $vacancy) {
+            Assert::assertTrue(
+                Str::same($vacancy['countryCode'], $location) || Str::same($vacancy['city'], $location)
+            );
+        }
     }
 }
