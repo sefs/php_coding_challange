@@ -33,5 +33,13 @@ class StrTest extends TestCase
         ];
     }
 
+    public function testSameString()
+    {
+        self::assertTrue(Str::same('test', 'Test'));
+        self::assertTrue(Str::same('Test', 'test'));
+        self::assertTrue(Str::same('TeSt', 'tEsT'));
 
+        self::assertFalse(Str::same('foo', 'bar'));
+        self::assertFalse(Str::same('bar', 'baz'));
+    }
 }

@@ -10,4 +10,9 @@ class Str
     {
         return strtolower(preg_replace('/\s+/', '_', $str));
     }
+
+    public static function same(string $a, string $b): bool
+    {
+        return strcasecmp($a, $b) == 0;
+    }
 }
