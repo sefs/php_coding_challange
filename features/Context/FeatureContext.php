@@ -81,4 +81,17 @@ class FeatureContext extends AbstractFeatureContext
             );
         }
     }
+
+    /**
+     * @Then vacancy response should contain offer details
+     */
+    public function vacancyResponseShouldContainOfferDetails()
+    {
+        $json = $this->getJsonResponse();
+        Assert::assertArrayHasKey('id', $json);
+        Assert::assertArrayHasKey('jobTitle', $json);
+        Assert::assertArrayHasKey('seniorityLevel', $json);
+        Assert::assertArrayHasKey('city', $json);
+        Assert::assertArrayHasKey('salary', $json);
+    }
 }

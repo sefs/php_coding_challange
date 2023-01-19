@@ -41,8 +41,8 @@ RESPONSE:
 ### GET /vacancy/search
 
 Optional parameters:
- - location - will filter results by country code or city
- - sort - will order results ascending by `salary` or `seniorityLevel`
+ - `location` - will filter results by country code or city
+ - `sort` - will order results ascending by `salary` or `seniorityLevel`
 
 I.e.
 ```
@@ -134,4 +134,38 @@ RESPONSE:
 ]
 ```
 
+### GET /vacancy/best
 
+This end-point will look for the best vacancy based on passed arguments, but it will prioritize higher salary.
+See `VacancySkillFilter` to check logic behind skill comparision.
+
+Optional parameters:
+- `seniorityLevel` - will filter vancies by seniority level. Result will contain vacancy with expected or lower level. 
+I.e. for `middle` it can return vacancies with `junior` or `middle` level.
+- (*array*) `skills` - will filter results by skills. Remember to pass this argument as array. I.e. `skills[]=PHP`.
+
+I.e.
+```
+http://localhost:8001/vacancy/best?seniorityLevel=senior&skills[]=symfony&skills[]=php&skills[]=docker&skills[]=SOLID
+
+RESPONSE:
+{
+    "id": 26,
+    "jobTitle": "Middle Fullstack Developer",
+    "seniorityLevel": "Middle",
+    "countryCode": "IE",
+    "city": "Dublin",
+    "salary": 862500,
+    "currency": "SVU",
+    "requiredSkills": [
+        "PHP",
+        "JavaScript",
+        "CSS/SASS",
+        "SQL",
+        "AWS",
+        "Docker"
+    ],
+    "companySize": "10-50",
+    "companyDomain": "Logistics"
+}
+```

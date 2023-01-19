@@ -34,3 +34,8 @@ Feature: Vacancy end-point
     Then the response status code should be 200
     And the response should contain list of vacancies
     And the results are filtered by location "Amsterdam"
+
+  Scenario: Check that end-point returning vacancy best offer
+    When I am on "/vacancy/best"
+    Then the response status code should be 200
+    And vacancy response should contain offer details

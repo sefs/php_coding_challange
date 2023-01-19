@@ -46,8 +46,8 @@ class VacancyController
     public function getBestAction(Request $request): JsonResponse
     {
         $filter = new VacancyQueryFilter([
-            'skills' => $request->query->get('skills', []),
-            'seniorityLevel' => $request->query->get('seniorityLevel', 'Junior')
+            'skills' => (array)$request->query->get('skills', []),
+            'seniorityLevel' => $request->query->get('seniorityLevel', '')
         ]);
         $sort = new VacancySort('salary');
         $vacancy = $this->vacancyProvider->findOneByFilter($filter, $sort);
