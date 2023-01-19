@@ -6,8 +6,6 @@ namespace App\Service;
 
 use App\DTO\Vacancy;
 use App\DTO\VacancyQueryFilter;
-use App\DTO\VacancySort;
-use App\Helper\Str;
 use App\Repository\VacancyRepositoryInterface;
 
 class VacancyProvider
@@ -39,13 +37,26 @@ class VacancyProvider
     public function findByFilter(VacancyQueryFilter $vacancyQueryFilter, VacancySort $vacancySort): array
     {
         $vacancies = $this->vacancyRepository->getAll();
-        $location = $vacancyQueryFilter->getLocation();
-        if (null !== $location) {
-            $vacancies = array_filter($vacancies, function (Vacancy $vacancy) use ($location) {
-                return Str::same($location, $vacancy->getCity()) || Str::same($location, $vacancy->getCountryCode());
-            });
+        foreach ($vacancyQueryFilter->getFilters() as $filterObj) {
+            $vacancies = $filterObj->filter($vacancies);
         }
 
         return $vacancySort->sort($vacancies);
     }
+
+    /**
+     * @param VacancyQueryFilter $vacancyQueryFilter
+     * @param VacancySort $vacancySort
+     * @return Vacancy|null
+     */
+    public function findOneByFilter(VacancyQueryFilter $vacancyQueryFilter, VacancySort $vacancySort): ?Vacancy
+    {
+        $vacancies = $this->findByFilter($vacancyQueryFilter, $vacancySort);
+
+        // We sort in ascending order so last row will be the best one
+        return empty($vacancies) ? null : end($vacancies);
+
+    }
+
+
 }

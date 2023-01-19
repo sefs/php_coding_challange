@@ -1,8 +1,6 @@
 # Auto1 Coding Challenge
 
-
 ## API Structure
-
 
 ### GET /vacancy/:id
 

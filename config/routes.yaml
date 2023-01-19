@@ -6,6 +6,10 @@ vacancy_search:
     path: /vacancy/search
     controller: App\Controller\VacancyController::searchAction
 
+vacancy_best:
+    path: /vacancy/best
+    controller: App\Controller\VacancyController::getBestAction
+
 vacancy:
     path: /vacancy/{id}
     controller: App\Controller\VacancyController::getAction

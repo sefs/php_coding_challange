@@ -4,17 +4,31 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
+use App\Service\VacancyFilterInterface;
+use App\Service\VacancyLocationFilter;
+use App\Service\VacancySeniorityLevelFilter;
+use App\Service\VacancySkillFilter;
+
 class VacancyQueryFilter
 {
-    private $location;
+    /**
+     * @var VacancyFilterInterface[]
+     */
+    private $filters = [];
 
     public function __construct(array $params)
     {
-        $this->location = $params['location'] ?? null;
+        $this->filters[] = new VacancyLocationFilter($params['location'] ?? '');
+        $this->filters[] = new VacancySkillFilter($params['skills'] ?? []);
+        $this->filters[] = new VacancySeniorityLevelFilter($params['seniorityLevel'] ?? '');
+
     }
 
-    public function getLocation()
+    /**
+     * @return VacancyFilterInterface[]
+     */
+    public function getFilters(): array
     {
-        return $this->location;
+        return $this->filters;
     }
 }

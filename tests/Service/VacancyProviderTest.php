@@ -4,10 +4,10 @@ namespace Tests\App\Service;
 
 use App\DTO\Vacancy;
 use App\DTO\VacancyQueryFilter;
-use App\DTO\VacancySort;
 use App\Factory\VacancyFactory;
 use App\Repository\VacancyRepositoryInterface;
 use App\Service\VacancyProvider;
+use App\Service\VacancySort;
 use PHPUnit\Framework\TestCase;
 
 class VacancyProviderTest extends TestCase
@@ -150,6 +150,35 @@ class VacancyProviderTest extends TestCase
         foreach ($vacancies as $vacancy) {
             self::assertSame('DE', $vacancy->getCountryCode());
         }
+    }
+
+    public function testFindOneByFilter(): void
+    {
+        $limit = 9;
+        $testData = $this->getVacancyList($limit);
+        $vacancyRepositoryMock = $this->createMock(VacancyRepositoryInterface::class);
+        $vacancyRepositoryMock
+            ->expects($this->once())
+            ->method('getAll')
+            ->willReturn(
+                $testData
+            );
+
+        $vacancyProvider = new VacancyProvider($vacancyRepositoryMock);
+        $filter = new VacancyQueryFilter([
+            'skills' => ['PHP', 'Symfony'],
+            'seniorityLevel' => 'Middle'
+        ]);
+        $sort = new VacancySort('salary');
+
+        $vacancy = $vacancyProvider->findOneByFilter($filter, $sort);
+        self::assertTrue(
+            in_array('PHP', $vacancy->getRequiredSkills())
+            || in_array('Symfony', $vacancy->getRequiredSkills())
+        );
+
+        self::assertTrue('Middle' === $vacancy->getSeniorityLevel()
+            || 'Junior' === $vacancy->getSeniorityLevel());
     }
 
     private function getVacancyList(int $limit): array
