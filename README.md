@@ -169,3 +169,26 @@ RESPONSE:
     "companyDomain": "Logistics"
 }
 ```
+
+### Testing
+
+To run tests use following command (if you use Docker)
+```
+docker-compose run php composer install        # to install dependencies
+docker-compose up                              # to run your app
+docker-compose run php /www/vendor/bin/phpunit # to run unit tests
+docker-compose run php /www/vendor/bin/behat   # to run behat tests
+```
+
+Or if you don't use docker:
+```
+composer install                      # to install dependencies
+bin/console server:run 127.0.0.1:8001 # to run your app
+./vendor/bin/phpunit                  # to run unit tests
+./vendor/bin/behat                    # to run behat tests
+```
+
+To generate PHPUnit coverage:
+```
+docker-compose run php /www/vendor/bin/phpunit --coverage-html var/coverage
+```
